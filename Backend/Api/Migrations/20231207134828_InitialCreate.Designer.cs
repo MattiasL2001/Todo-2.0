@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using todo_backend.Data;
+using Api.Data;
 
 #nullable disable
 
-namespace todo_backend.Migrations
+namespace Api.Migrations
 {
     [DbContext(typeof(TodoContext))]
     [Migration("20231207134828_InitialCreate")]
@@ -19,7 +19,7 @@ namespace todo_backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
-            modelBuilder.Entity("todo_backend.Models.Todo", b =>
+            modelBuilder.Entity("Api.Models.Todo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

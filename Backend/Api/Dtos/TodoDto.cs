@@ -1,6 +1,6 @@
-﻿namespace todo_backend.Models
+﻿namespace Api.Dtos
 {
-    public class Todo
+    public class TodoDto
     {
         public int Id { get; set; }
         public int PersonId { get; set; }
