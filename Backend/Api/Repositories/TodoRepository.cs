@@ -17,7 +17,6 @@ public class TodoRepository : ITodoRepository
     {
         _context.Todos.Add(todo);
         await _context.SaveChangesAsync();
-
         return todo;
     }
 
