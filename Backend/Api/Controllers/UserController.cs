@@ -21,7 +21,22 @@ namespace Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("/users")]
+        public async Task<ActionResult<List<UserDto>>> GetUsers()
+        {
+            List<User> users = await _userRepository.GetUsers();
+            List<UserDto> usersDto = _mapper.Map<List<UserDto>>(users);
+            return Ok(usersDto);
+        }
+
+        [HttpPost("/users")]
+        public async Task<ActionResult<UserDto>> AddUser()
+        {
+            var user = await _userRepository.AddUser();
+            return Ok(user);
+        }
+
+        [HttpGet("/users/todos")]
         public async Task<ActionResult<List<TodoDto>>> GetUserTodos(int id)
         {
             var todos = await _userRepository.GetUserTodos(id);
@@ -41,9 +56,9 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TodoDto>> PostTodo(Todo todo, User user)
+        public async Task<ActionResult<TodoDto>> PostTodo(Todo todo)
         {
-            var createdTodo = await _userRepository.AddTodo(todo, user);
+            var createdTodo = await _userRepository.AddTodo(todo);
             return CreatedAtAction("GetTodo", new { id = createdTodo.Id }, value: createdTodo);
         }
 

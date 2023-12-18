@@ -19,14 +19,9 @@ builder.Services.AddControllers();
 //    opt.UseSqlite(connectionString);
 //});
 
-builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
-builder.Services.AddDbContext<TodoContext>(options =>
-{
-    options.UseSqlite("Data Source=todoDb.db");
-});
 builder.Services.AddDbContext<UserContext>(options =>
 {
     options.UseSqlite("Data Source=userDb.db");

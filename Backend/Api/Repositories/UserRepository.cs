@@ -12,8 +12,35 @@ namespace Api.Repositories
             _context = userContext;
         }
 
-        public async Task<Todo> AddTodo(Todo todo, User user)
+        public async Task<List<User>> GetUsers()
         {
+            var users = await _context.Users.ToListAsync();
+            return users;
+        }
+
+        public async Task<User> AddUser()
+        {
+            int id = 0;
+
+            while(true)
+            {
+                var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
+
+                if (existingUser == null)
+                {
+                    break;
+                }
+            }
+
+            User user1 = new User(id, null, "User: " + id.ToString(), "12345");
+            _context.Users.Add(user1);
+            await _context.SaveChangesAsync();
+            return user1;
+        }
+
+        public async Task<Todo> AddTodo(Todo todo)
+        {
+            var user = await _context.Users.FindAsync(todo.UserId);
             user.Todos.Add(todo);
             await _context.SaveChangesAsync();
             return todo;

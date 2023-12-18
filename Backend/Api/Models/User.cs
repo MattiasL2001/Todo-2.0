@@ -3,18 +3,18 @@
     public class User
     {
         public int Id { get; set; }
-        public List<Todo> Todos { get; set; } = new List<Todo>();
+        public List<Todo> Todos { get; set; }
         public string UserName { get; set; } = string.Empty;
-        private string Password { get; set; } = string.Empty.ToString();
-        public string PasswordHash
-        {
-            get => Password;
-            set => Password = HashPassword(value);
-        }
+        private string Password { get; set; } = string.Empty;
 
-        private string HashPassword(string password)
+        public User() { }
+
+        public User(int id, List<Todo> todos, string userName, string password)
         {
-            return password;
+            Id = id;
+            Todos = todos;
+            UserName = userName;
+            Password = password;
         }
     }
 }

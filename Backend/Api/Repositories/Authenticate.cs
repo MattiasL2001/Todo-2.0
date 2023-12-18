@@ -28,15 +28,15 @@ namespace Api.Repositories
 
         public async Task<bool> Register(string username, string password)
         {
-            var findExistingUserWithName = await _userManager.FindByNameAsync(username);
+            //var findExistingUserWithName = await _userManager.FindByNameAsync(username);
 
-            if (findExistingUserWithName == null)
-            {
-                var user = new User { UserName = username };
-                var result = await _userManager.CreateAsync(user, password);
+            //if (findExistingUserWithName == null)
+            //{
+            //    var user = new User { UserName = username };
+            //    var result = await _userManager.CreateAsync(user, password);
 
-                return result.Succeeded;
-            }
+            //    return result.Succeeded;
+            //}
 
             return false;
         }
@@ -87,12 +87,6 @@ namespace Api.Repositories
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
-        }
-
-        private bool VerifyPassword(User user, string password)
-        {
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
-            return result == PasswordVerificationResult.Success;
         }
     }
 }
