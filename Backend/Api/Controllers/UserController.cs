@@ -23,7 +23,7 @@ namespace Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet("/users")]
+        [HttpGet("/usersGetUsers")]
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
             List<User> users = await _userRepository.GetUsers();
@@ -44,7 +44,7 @@ namespace Api.Controllers
             return Ok(usersDto);
         }
 
-        [HttpPost("/users")]
+        [HttpPost("/users/AddUser")]
         public async Task<ActionResult<UserDto>> AddUser(string userName, string password)
         {
             if (await _userRepository.IsUserNameTaken(userName)) { return Conflict("Username already exists!"); }
@@ -62,19 +62,12 @@ namespace Api.Controllers
             return Ok(todosDto);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/users/GetUserTodo")]
         public async Task<ActionResult<TodoDto>> GetTodo(int userId, int todoId)
         {
-            //var user = await _userRepository.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
-
-            //var todo = await _userRepository.GetTodo(id, user);
-            //if (todo == null) { return NotFound(); }
-
-            //var todoDto = _mapper.Map<TodoDto>(todo);
-
-            //return Ok(todoDto);
-
-            return Ok();
+            Todo todo = await _userRepository.GetTodo(userId, todoId);
+            if (todo == null) { return null; }
+            return Ok(todo);
         }
 
         [HttpPost("/users/PostTodo")]
@@ -84,10 +77,10 @@ namespace Api.Controllers
             return Ok(createdTodo);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Todo>> PutTodo(int id, User user)
+        [HttpPut("/users/PutTodo")]
+        public async Task<ActionResult<Todo>> PutTodo(int userId, int todoId, Todo todo)
         {
-            var updatedTodo = await _userRepository.UpdateTodo(id, user);
+            var updatedTodo = await _userRepository.UpdateTodo(userId, todoId, todo);
 
             if (updatedTodo == null) { return BadRequest(); }
 
@@ -95,27 +88,20 @@ namespace Api.Controllers
             return Ok(todoDto);
         }
 
-        [HttpDelete(template: "{id}")]
-        public async Task<IActionResult> DeleteTodo(int id, User user)
+        [HttpDelete("/users/DeleteTodo")]
+        public async Task<IActionResult> DeleteTodo(int userId, int todoId)
         {
-            try
-            {
-                var todo = await _userRepository.DeleteTodo(id, user);
+            var todo = await _userRepository.DeleteTodo(userId, todoId);
+            if (todo == null) { return  NotFound(); }
+            return Ok(todo);
+        }
 
-                if (todo == null)
-                {
-                    _logger.LogWarning(message: "Todo with id: {id} was not found", id);
-                    return NotFound();
-                }
-
-                _logger.LogInformation(message: "Todo with id {id} was deleted", id);
-                return NoContent();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, message: "Error while trying to delete todo with id: {id}", id);
-                return StatusCode(500, value: "Internal Server Error");
-            }
+        [HttpDelete("/users/DeleteUser")]
+        public async Task<IActionResult> DeleteUser(int userId)
+        {
+            User user = await _userRepository.DeleteUser(userId);
+            if (user == null) { return NotFound(); };
+            return Ok(user);
         }
     }
 }

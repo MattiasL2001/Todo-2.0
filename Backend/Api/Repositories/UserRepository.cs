@@ -17,9 +17,15 @@ namespace Api.Repositories
 
         public async Task<List<User>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            //users[0].Todos.ForEach(todo => Console.WriteLine(todo + ("!!")));
+            var users = await _context.Users.Include(u => u.Todos).ToListAsync();
             return users;
+        }
+
+        public async Task<User> GetUser(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) { return null; }
+            return user;
         }
 
         public async Task<User> AddUser(string userName, string password)
@@ -68,20 +74,33 @@ namespace Api.Repositories
             return todo;
         }
 
-        public async Task<Todo> UpdateTodo(int todoId, User user)
+        public async Task<Todo> UpdateTodo(int userId, int todoId, Todo updatedTodo)
         {
-            var todo = user.Todos.FirstOrDefault(todo => todo.Id == todoId);
-            _context.Entry(user.Todos).State = EntityState.Modified;
+            Todo todo = await GetTodo(userId, todoId);
+            if (todo == null) { return null; };
+            if (updatedTodo == null) { return null; }
+            todo.Title = updatedTodo.Title;
+            todo.Completed = updatedTodo.Completed;
             await _context.SaveChangesAsync();
             return todo;
         }
 
-        public async Task<Todo> DeleteTodo(int todoId, User user)
+        public async Task<Todo> DeleteTodo(int userId, int todoId)
         {
-            var todo = user.Todos.FirstOrDefault(todo => todo.Id == todoId);
+            Todo todo = await GetTodo(userId, todoId);
+            if (todo == null) { return null; };
             _context.Remove(todo);
             await _context.SaveChangesAsync();
             return todo;
+        }
+
+        public async Task<User> DeleteUser(int userId)
+        {
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null) { return null; }
+            _context.Remove(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
     }
 }

@@ -1,17 +1,18 @@
-﻿using Api.Dtos;
-using Api.Models;
+﻿using Api.Models;
 
 namespace Api.Repositories
 {
     public interface IUserRepository
     {
         Task<List<User>> GetUsers();
+        Task<User> GetUser(int id);
         Task<User> AddUser(string userName, string password);
+        Task<List<Todo>> GetUserTodos(int id);
+        Task<User> DeleteUser(int id);
         Task<bool> IsUserNameTaken(string userName);
         Task<List<Todo>> AddTodo(Todo todo, int id);
         Task<Todo> GetTodo(int userId, int todoId);
-        Task<List<Todo>> GetUserTodos(int id);
-        Task<Todo> UpdateTodo(int todoId, User user);
-        Task<Todo> DeleteTodo(int todoId, User user);
+        Task<Todo> UpdateTodo(int userId, int todoId, Todo updatedTodo);
+        Task<Todo> DeleteTodo(int userId, int todoId);
     }
 }
