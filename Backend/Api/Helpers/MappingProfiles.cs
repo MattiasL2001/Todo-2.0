@@ -9,6 +9,7 @@ namespace Api.Helpers
         public MappingProfiles()
         {
             CreateMap<User, UserDto>();
+            CreateMap<Todo, TodoDto>();
         }
     }
 }

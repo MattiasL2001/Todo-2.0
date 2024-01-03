@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+//using Microsoft.AspNetCore.Identity;
+using Api.Dtos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,15 @@ builder.Services.AddDbContext<UserContext>(options =>
 {
     options.UseSqlite("Data Source=userDb.db");
 });
+
+//builder.Services.AddIdentity<UserDto, IdentityRole>()
+//    .AddEntityFrameworkStores<UserContext>()
+//    .AddDefaultTokenProviders();
+
+//builder.Services.AddIdentityCore<UserDto>()
+//    .AddSignInManager<SignInManager<UserDto>>()
+//    .AddDefaultTokenProviders();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

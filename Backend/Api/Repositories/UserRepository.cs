@@ -1,5 +1,8 @@
 ﻿using Api.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.Repositories
 {
@@ -15,51 +18,54 @@ namespace Api.Repositories
         public async Task<List<User>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
+            //users[0].Todos.ForEach(todo => Console.WriteLine(todo + ("!!")));
             return users;
         }
 
-        public async Task<User> AddUser()
+        public async Task<User> AddUser(string userName, string password)
         {
-            int id = 0;
-
-            while(true)
-            {
-                var existingUser = _context.Users.FirstOrDefault(u => u.Id == id);
-
-                if (existingUser == null)
-                {
-                    break;
-                }
-            }
-
-            User user1 = new User(id, null, "User: " + id.ToString(), "12345");
-            _context.Users.Add(user1);
+            User user = new User(0, null, userName, password);
+            _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return user1;
+            return user;
         }
 
-        public async Task<Todo> AddTodo(Todo todo)
+        public async Task<bool> IsUserNameTaken(string userName)
         {
-            var user = await _context.Users.FindAsync(todo.UserId);
+            var count = await _context.Users.CountAsync(u => u.UserName.ToLower() == userName.ToLower());
+
+            if (count > 0) { return true; }
+            return false;
+        }
+
+        public async Task<List<Todo>> AddTodo(Todo todo, int id)
+        {
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) { return null; }
+
             user.Todos.Add(todo);
             await _context.SaveChangesAsync();
+            return user.Todos;
+        }
+
+        public async Task<List<Todo>> GetUserTodos(int userId)
+        {
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user.Todos == null) { return null; }
+
+            return user.Todos;
+        }
+
+        public async Task<Todo> GetTodo(int userId, int todoId)
+        {
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null) { return null; }
+
+            var todo = user.Todos.FirstOrDefault(todo => todo.Id == todoId);
+
             return todo;
-        }
-
-        public async Task<List<Todo>> GetUserTodos(int todoId)
-        {
-            var user = await _context.Users.FindAsync(todoId);
-
-            if (user.Todos != null) { return user.Todos; }
-
-            return null;
-        }
-
-        public async Task<List<Todo>> GetTodo(int todoId, User user)
-        {
-            var u = await _context.Users.FindAsync(user.Id);
-            var todo = u.Todos.FirstOrDefault(todo => todo.Id == todoId);
-            return u.Todos;
         }
 
         public async Task<Todo> UpdateTodo(int todoId, User user)

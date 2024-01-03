@@ -3,6 +3,7 @@ using Api.Models;
 using Api.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
@@ -13,6 +14,7 @@ namespace Api.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
+        private int passwordMinimumLength = 5;
 
         public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
         {
@@ -25,41 +27,61 @@ namespace Api.Controllers
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {
             List<User> users = await _userRepository.GetUsers();
+            users.ForEach(user =>
+            {
+                Console.WriteLine(user.UserName);
+
+                if (user.Todos.Count > 0)
+                {
+                    foreach (var todo in user.Todos)
+                    {
+                        Console.WriteLine(todo + "!!!!");
+                    }
+                }
+                else { Console.WriteLine("no todos"); }
+            });
             List<UserDto> usersDto = _mapper.Map<List<UserDto>>(users);
             return Ok(usersDto);
         }
 
         [HttpPost("/users")]
-        public async Task<ActionResult<UserDto>> AddUser()
+        public async Task<ActionResult<UserDto>> AddUser(string userName, string password)
         {
-            var user = await _userRepository.AddUser();
-            return Ok(user);
+            if (await _userRepository.IsUserNameTaken(userName)) { return Conflict("Username already exists!"); }
+            if (password.Length < passwordMinimumLength) { return Conflict("Password need to include at minimum 5 characters!"); }
+
+            var userObj = await _userRepository.AddUser(userName, password);
+            return Ok(userObj);
         }
 
-        [HttpGet("/users/todos")]
+        [HttpGet("/users/GetUserTodos")]
         public async Task<ActionResult<List<TodoDto>>> GetUserTodos(int id)
         {
-            var todos = await _userRepository.GetUserTodos(id);
-            var todosDto = _mapper.Map<List<TodoDto>>(todos);
+            List<Todo> todos = await _userRepository.GetUserTodos(id);
+            List<TodoDto> todosDto = _mapper.Map<List<TodoDto>>(todos);
             return Ok(todosDto);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TodoDto>> GetTodo(int id, User user)
+        public async Task<ActionResult<TodoDto>> GetTodo(int userId, int todoId)
         {
-            var todo = await _userRepository.GetTodo(id, user);
-            if (todo == null) { return NotFound(); }
+            //var user = await _userRepository.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
 
-            var todoDto = _mapper.Map<TodoDto>(todo);
+            //var todo = await _userRepository.GetTodo(id, user);
+            //if (todo == null) { return NotFound(); }
 
-            return Ok(todoDto);
+            //var todoDto = _mapper.Map<TodoDto>(todo);
+
+            //return Ok(todoDto);
+
+            return Ok();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<TodoDto>> PostTodo(Todo todo)
+        [HttpPost("/users/PostTodo")]
+        public async Task<ActionResult<TodoDto>> PostTodo(Todo todo, int id)
         {
-            var createdTodo = await _userRepository.AddTodo(todo);
-            return CreatedAtAction("GetTodo", new { id = createdTodo.Id }, value: createdTodo);
+            var createdTodo = await _userRepository.AddTodo(todo, id);
+            return Ok(createdTodo);
         }
 
         [HttpPut("{id}")]
