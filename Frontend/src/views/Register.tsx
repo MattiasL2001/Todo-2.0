@@ -1,5 +1,5 @@
 import Header from "../components/Header"
-import LoginComponent from "../components/LoginComponent"
+import RegisterComponent from "../components/RegisterComponent"
 
 export default function Register() {
     return (
@@ -7,7 +7,7 @@ export default function Register() {
             <Header></Header>
             <h2>Register Page</h2>
             <br></br>
-            <LoginComponent></LoginComponent>
+            <RegisterComponent></RegisterComponent>
         </>
     )
 }

@@ -7,6 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Api.Dtos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Repositories
 {
@@ -16,6 +18,7 @@ namespace Api.Repositories
         private readonly IConfiguration _configuration;
         private readonly SignInManager<Task<User>> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly UserContext _context;
 
         public AuthenticationService(IPasswordHasher<User> passwordHasher, IConfiguration configuration,
             SignInManager<Task<User>> signInManager, UserManager<User> userManager)
@@ -29,6 +32,8 @@ namespace Api.Repositories
         public async Task<bool> Register(string username, string password)
         {
             var findExistingUserWithName = await _userManager.FindByNameAsync(username);
+
+            if (findExistingUserWithName != null) { }
 
             if (findExistingUserWithName == null)
             {

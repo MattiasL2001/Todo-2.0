@@ -28,9 +28,9 @@ namespace Api.Repositories
             return user;
         }
 
-        public async Task<User> AddUser(string userName, string password)
+        public async Task<User> AddUser(string username, string password)
         {
-            User user = new User(0, null, userName, password);
+            User user = new User(0, new List<Todo>(), username, password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
