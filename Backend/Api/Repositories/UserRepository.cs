@@ -1,8 +1,5 @@
 ﻿using Api.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace Api.Repositories
 {
@@ -24,6 +21,13 @@ namespace Api.Repositories
         public async Task<User> GetUser(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) { return null; }
+            return user;
+        }
+
+        public async Task<User> GetUser(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
             if (user == null) { return null; }
             return user;
         }

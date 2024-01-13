@@ -31,6 +31,7 @@ builder.Services.AddCors(options =>
 //});
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthenticate, AuthenticationService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 builder.Services.AddDbContext<UserContext>(options =>

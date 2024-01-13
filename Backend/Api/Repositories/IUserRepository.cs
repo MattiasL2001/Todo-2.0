@@ -6,6 +6,7 @@ namespace Api.Repositories
     {
         Task<List<User>> GetUsers();
         Task<User> GetUser(int id);
+        Task<User> GetUser(string username);
         Task<User> AddUser(string userName, string password);
         Task<List<Todo>> GetUserTodos(int id);
         Task<User> DeleteUser(int id);

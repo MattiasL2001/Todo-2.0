@@ -25,6 +25,15 @@ namespace Api.Controllers
             _logger = logger;
         }
 
+        [HttpGet("/user/{username}")]
+        public async Task<ActionResult<UserDto>> GetUser(string username)
+        {
+            var user = await _userRepository.GetUser(username);
+            if (user == null) { return BadRequest("Could not find user: " + username); }
+            return Ok(user);
+        }
+
+
         [HttpGet("/usersGetUsers")]
         public async Task<ActionResult<List<UserDto>>> GetUsers()
         {

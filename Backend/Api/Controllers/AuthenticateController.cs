@@ -1,8 +1,5 @@
 ﻿using Api.Dtos;
-using Api.Models;
 using Api.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -12,15 +9,11 @@ namespace Api.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticate _authenticate;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthenticateController(SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager, IAuthenticate authenticate)
+        public AuthenticateController(IAuthenticate authenticate)
         {
             _authenticate = authenticate;
-            _signInManager = signInManager;
-            _userManager = userManager;
+
         }
 
         [HttpPost("register")]
@@ -45,14 +38,14 @@ namespace Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserAuthenticationDto userDto)
         {
+            Console.WriteLine("login attempted");
             if (ModelState.IsValid)
             {
-                var token = await _authenticate.Login(userDto.UserName, userDto.Password);
+                var user = await _authenticate.Login(userDto.UserName, userDto.Password);
 
-                if (token != null)
-                {
-                    return Ok(new {Token = token});
-                }
+                if (user == null) { return Unauthorized("Could not find a user with matching credentials"); }
+
+                return Ok(user);
             }
 
             return Unauthorized("Invalid username or password!");
