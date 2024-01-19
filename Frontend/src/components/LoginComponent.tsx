@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../AuthContext';
+import Login from '../views/Login';
+import { LoginUser } from '../services/userServices';
 
 const LoginComponent: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -11,18 +12,16 @@ const LoginComponent: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('https://localhost:7067/api/Authenticate/login', {
-        username: username,
-        password: password
-      });
+      const response = await LoginUser(username, password);
 
       if (response.status === 200) {
         console.log("logged in");
         setAuthenticated(true);
       } else {
-        console.log("error: " + response);
+        console.log("error: " + response.status);
       }
     } catch (error) {
+      // Handle errors
       console.error('Login failed:', error);
     }
   };

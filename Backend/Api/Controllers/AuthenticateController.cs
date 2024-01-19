@@ -1,4 +1,5 @@
 ﻿using Api.Dtos;
+using Api.Models;
 using Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,39 +10,40 @@ namespace Api.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticate _authenticate;
+        private readonly IUserRepository _userRepository;
+        private int passwordMinimumLength = 5;
 
-        public AuthenticateController(IAuthenticate authenticate)
+        public AuthenticateController(IAuthenticate authenticate, IUserRepository userRepository)
         {
             _authenticate = authenticate;
+            _userRepository = userRepository;
 
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] UserAuthenticationDto userAuthDto)
+        [HttpPost("/register")]
+        public async Task<ActionResult<UserDto>> Register(UserRegistration user)
         {
-            if (ModelState.IsValid)
+            if (await _authenticate.IsUserNameTaken(user.Username))
             {
-                var result = await _authenticate.Register(userAuthDto.UserName, userAuthDto.Password);
-                if (result)
-                {
-                    return Ok("Registration successful");
-                }
-                else
-                {
-                    return BadRequest("Username already exists!");
-                }
+                Console.WriteLine($"{user.Username} is taken!");
+                return Conflict("Username already exists!");
+            }
+            if (user.Password.Length < passwordMinimumLength)
+            {
+                Console.WriteLine("Bad password!");
+                return Conflict("Password need to include at minimum 5 characters!");
             }
 
-            return BadRequest("Registration failed");
+            var userObj = await _authenticate.Register(user.Username, user.Password);
+            return Ok(userObj);
         }
 
-        [HttpPost("login")]
+        [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] UserAuthenticationDto userDto)
         {
-            Console.WriteLine("login attempted");
             if (ModelState.IsValid)
             {
-                var user = await _authenticate.Login(userDto.UserName, userDto.Password);
+                var user = await _authenticate.ValidateCredentials(userDto.UserName, userDto.Password);
 
                 if (user == null) { return Unauthorized("Could not find a user with matching credentials"); }
 
@@ -51,11 +53,22 @@ namespace Api.Controllers
             return Unauthorized("Invalid username or password!");
         }
 
-        [HttpPost("logout")]
+        [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
             await _authenticate.Logout();
             return Ok("Logout successful");
+        }
+
+        [HttpDelete("/delete")]
+        public async Task<IActionResult> DeleteUser(UserAuthenticationDto userDto)
+        {
+            var user = await _authenticate.ValidateCredentials(userDto.UserName, userDto.Password);
+
+            if (user == null) { return Unauthorized("Could not find a user with matching credentials"); }
+
+            _authenticate.DeleteAccount(user);
+            return Ok(user);
         }
     }
 }

@@ -5,14 +5,14 @@ namespace Api.Dtos
     public class UserDto
     {
         public int Id { get; set; }
+        public string Username { get; set; } = string.Empty;
         public List<Todo> Todos { get; set; } = new List<Todo>();
-        public string UserName { get; set; } = string.Empty;
 
-        public UserDto(int id, List<Todo> todos, string userName)
+        public UserDto(int id, string username, List<Todo> todos)
         {
             Id = id;
+            Username = username;
             Todos = todos;
-            UserName = userName;
         }
     }
 }

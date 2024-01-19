@@ -4,8 +4,10 @@ namespace Api.Repositories
 {
     public interface IAuthenticate
     {
-        Task<bool> Register(string username, string password);
-        Task<User> Login(string username, string password);
+        Task<User> Register(string username, string password);
+        Task<bool> IsUserNameTaken(string username);
+        Task<User> ValidateCredentials(string username, string password);
         Task Logout();
+        Task<User> DeleteAccount(User user);
     }
 }

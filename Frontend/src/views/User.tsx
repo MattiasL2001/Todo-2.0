@@ -1,8 +1,7 @@
-// User.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getUserDetails } from '../services/userServices';
+import { useAuth } from '../AuthContext';
 
 interface UserDetails {
   username: string;
@@ -12,11 +11,11 @@ interface UserDetails {
 const User: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    console.log("username: " + username)
     const fetchUserDetails = async () => {
-      if (username) {
+      if (isAuthenticated && username) {
         try {
           const userData = await getUserDetails(username);
           console.log("user details: " + userData)

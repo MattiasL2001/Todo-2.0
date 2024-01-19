@@ -1,20 +1,32 @@
 import React, { useState } from 'react';
-import { RegisterUser, GetUsers } from '../services/userServices';
+import { RegisterUser, GetUsers, LoginUser } from '../services/userServices';
+import { useAuth } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function RegisterComponent() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { isAuthenticated, setAuthenticated } = useAuth();
+    const navigate = useNavigate();
 
     const handleRegisterClick = async () => {
         
-        await RegisterUser(username, password)
-            .then(data => {
-                console.log('Registration successful:', data);
-            })
-            .catch(error => {
-                console.error('Registration failed :(', error.response);
-                console.error("user data: " + username + ", " + password)
-            });
+        try {
+            // Step 1: Register the user
+            const registrationData = await RegisterUser(username, password);
+
+            if (registrationData)
+            {
+                setAuthenticated(true)
+                console.log("isAuthed: " + isAuthenticated)
+                await LoginUser(username, password);
+                navigate(`/user/${username}`);
+            }
+            else (console.log("login failed"))
+            
+        } catch (error) {
+            console.error('Registration or login failed:', error);
+        }
     };
 
     return (

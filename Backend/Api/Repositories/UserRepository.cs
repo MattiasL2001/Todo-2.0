@@ -34,18 +34,10 @@ namespace Api.Repositories
 
         public async Task<User> AddUser(string username, string password)
         {
-            User user = new User(0, new List<Todo>(), username, password);
+            User user = new User(0, username, password, new List<Todo>());
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
-        }
-
-        public async Task<bool> IsUserNameTaken(string userName)
-        {
-            var count = await _context.Users.CountAsync(u => u.UserName.ToLower() == userName.ToLower());
-
-            if (count > 0) { return true; }
-            return false;
         }
 
         public async Task<List<Todo>> AddTodo(Todo todo, int id)
@@ -78,13 +70,12 @@ namespace Api.Repositories
             return todo;
         }
 
-        public async Task<Todo> UpdateTodo(int userId, int todoId, Todo updatedTodo)
+        public async Task<Todo> UpdateTodo(int userId, int todoId, bool completed, string title)
         {
             Todo todo = await GetTodo(userId, todoId);
             if (todo == null) { return null; };
-            if (updatedTodo == null) { return null; }
-            todo.Title = updatedTodo.Title;
-            todo.Completed = updatedTodo.Completed;
+            todo.Completed = completed;
+            todo.Title = title;
             await _context.SaveChangesAsync();
             return todo;
         }
@@ -96,15 +87,6 @@ namespace Api.Repositories
             _context.Remove(todo);
             await _context.SaveChangesAsync();
             return todo;
-        }
-
-        public async Task<User> DeleteUser(int userId)
-        {
-            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
-            if (user == null) { return null; }
-            _context.Remove(user);
-            await _context.SaveChangesAsync();
-            return user;
         }
     }
 }
