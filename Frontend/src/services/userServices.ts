@@ -30,3 +30,13 @@ export const getUserDetails = async (username: string) => {
       throw error;
     }
   };
+
+  export const getUserTodos = async (username: string) => {
+    try {
+      const response = await axios.get(`https://localhost:7067/users/${username}/GetTodos`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      throw error;
+    }
+  };

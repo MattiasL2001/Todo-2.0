@@ -1,21 +1,26 @@
 import React from 'react';
 
-export default function Footer() {
-    const footerStyle: React.CSSProperties = {
-        height: '150px', // You can change this to '200px' if you prefer
-        width: '100%',
-        backgroundColor: '#f0f0f0', // Add your desired background color
-        position: 'fixed',
-        bottom: '0',
-        left: '0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    };
+const pageStyle: React.CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  marginTop: "auto"
+};
 
-    return (
-        <div style={footerStyle}>
-            <h1>Footer</h1>
-        </div>
-    );
+const footerStyle: React.CSSProperties = {
+  height: '150px',
+  backgroundColor: '#f0f0f0',
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   marginTop: "auto"
+};
+
+export default function Footer() {
+  return (
+    <div style={pageStyle}>
+      <div style={footerStyle}>
+        <h1>Footer</h1>
+      </div>
+    </div>
+  );
 }

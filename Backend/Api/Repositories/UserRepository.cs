@@ -59,12 +59,10 @@ namespace Api.Repositories
             return user.Todos;
         }
 
-        public async Task<List<Todo>> GetUserTodos(int userId)
+        public async Task<List<Todo>> GetUserTodos(string username)
         {
-            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == userId);
-
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.UserName == username);
             if (user.Todos == null) { return null; }
-
             return user.Todos;
         }
 

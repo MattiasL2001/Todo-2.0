@@ -42,9 +42,10 @@ namespace Api.Controllers
         [HttpGet("/users/{username}")]
         public async Task<ActionResult<UserDto>> GetUser(string username)
         {
-            var user = await _userRepository.GetUser(username);
+            User user = await _userRepository.GetUser(username);
             if (user == null) { return BadRequest("Could not find user: " + username); }
-            return Ok(user);
+            UserDto userDto = _mapper.Map<UserDto>(user);
+            return Ok(userDto);
         }
 
         [HttpPut("/users/{username}/changepassword")]
@@ -69,9 +70,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("/users/{username}/GetTodos")]
-        public async Task<ActionResult<List<TodoDto>>> GetUserTodos(int id)
+        public async Task<ActionResult<List<TodoDto>>> GetUserTodos(string username)
         {
-            List<Todo> todos = await _userRepository.GetUserTodos(id);
+            List<Todo> todos = await _userRepository.GetUserTodos(username);
             List<TodoDto> todosDto = _mapper.Map<List<TodoDto>>(todos);
             return Ok(todosDto);
         }
