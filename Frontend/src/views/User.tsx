@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getUserDetails } from '../services/userServices';
 import { useAuth } from '../AuthContext';
+import Header from '../components/Header';
 
 interface UserDetails {
   username: string;
@@ -18,7 +19,6 @@ const User: React.FC = () => {
       if (isAuthenticated && username) {
         try {
           const userData = await getUserDetails(username);
-          console.log("user details: " + userData)
           setUserDetails(userData);
         } catch (error) {
           // Handle the error if needed
@@ -31,15 +31,21 @@ const User: React.FC = () => {
   }, [username]); // Run the effect whenever the username changes
 
   if (!userDetails) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Header></Header>
+        <div>You must login in order to view this page.</div>
+      </>
+    );
   }
 
   return (
-    <div>
+    <>
+      <Header></Header>
       <h2>User Details</h2>
       <p>Username: {username}</p>
       {/* Add other user details here based on your API response */}
-    </div>
+    </>
   );
 };
 

@@ -18,23 +18,20 @@ namespace Api.Repositories
         public async Task<User> Register(string username, string password)
         {
             string hashedPassword = HashPassword(password);
-            User user = new User(0, username, hashedPassword, new List<Todo>());
+            User user = new User(0, username, hashedPassword, []);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
         }
 
-        private string HashPassword(string password)
+        public string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())
             {
-                // Convert the password string to bytes
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
 
-                // Compute the hash
                 byte[] hashBytes = sha256.ComputeHash(passwordBytes);
 
-                // Convert the hash bytes to a hexadecimal string
                 StringBuilder builder = new StringBuilder();
                 foreach (byte b in hashBytes)
                 {

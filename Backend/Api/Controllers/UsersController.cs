@@ -13,14 +13,16 @@ namespace Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        private readonly IAuthenticate _iAuthenticate;
+        private readonly IAuthenticate _authenticate;
         private readonly IMapper _mapper;
         private readonly ILogger<UsersController> _logger;
         private int passwordMinimumLength = 5;
 
-        public UsersController(IUserRepository userRepository, IMapper mapper, ILogger<UsersController> logger)
+        public UsersController(IUserRepository userRepository, IAuthenticate authenticate,
+            IMapper mapper, ILogger<UsersController> logger)
         {
             _userRepository = userRepository;
+            _authenticate = authenticate;
             _mapper = mapper;
             _logger = logger;
         }
@@ -43,6 +45,27 @@ namespace Api.Controllers
             var user = await _userRepository.GetUser(username);
             if (user == null) { return BadRequest("Could not find user: " + username); }
             return Ok(user);
+        }
+
+        [HttpPut("/users/{username}/changepassword")]
+        public async Task<IActionResult> ChangePassword(UserAuthenticationDto userDto, string newPassword)
+        {
+            var user = await _authenticate.ValidateCredentials(userDto.UserName, userDto.Password);
+
+            if (user == null)
+            {
+                return Unauthorized("Could not find a user with matching credentials");
+            }
+
+            if (newPassword.Length < passwordMinimumLength)
+            {
+                Console.WriteLine("Bad password!");
+                return Conflict("Password needs to include at minimum 5 characters!");
+            }
+
+            var newPasswordHash = _authenticate.HashPassword(newPassword);
+            await _userRepository.ChangeUserPassword(userDto.UserName, newPasswordHash);
+            return Ok("Password changed successfully");
         }
 
         [HttpGet("/users/{username}/GetTodos")]

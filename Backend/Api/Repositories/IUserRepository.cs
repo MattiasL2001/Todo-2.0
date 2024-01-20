@@ -8,6 +8,7 @@ namespace Api.Repositories
         Task<User> GetUser(int id);
         Task<User> GetUser(string username);
         Task<User> AddUser(string userName, string password);
+        Task<User> ChangeUserPassword(string username, string newPassword);
         Task<List<Todo>> GetUserTodos(int id);
         Task<List<Todo>> AddTodo(Todo todo, int id);
         Task<Todo> GetTodo(int userId, int todoId);

@@ -10,14 +10,11 @@ namespace Api.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticate _authenticate;
-        private readonly IUserRepository _userRepository;
         private int passwordMinimumLength = 5;
 
-        public AuthenticateController(IAuthenticate authenticate, IUserRepository userRepository)
+        public AuthenticateController(IAuthenticate authenticate)
         {
             _authenticate = authenticate;
-            _userRepository = userRepository;
-
         }
 
         [HttpPost("/register")]

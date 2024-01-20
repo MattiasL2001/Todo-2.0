@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
-import Login from '../views/Login';
 import { LoginUser } from '../services/userServices';
 
 const LoginComponent: React.FC = () => {
@@ -14,23 +13,20 @@ const LoginComponent: React.FC = () => {
     try {
       const response = await LoginUser(username, password);
 
-      if (response.status === 200) {
+      if (response.status === 200 && username !== "undefined") {
         console.log("logged in");
+
         setAuthenticated(true);
+        sessionStorage.setItem('username', username);
+
+        navigate(`/user/${username}`);
       } else {
         console.log("error: " + response.status);
       }
     } catch (error) {
-      // Handle errors
       console.error('Login failed:', error);
     }
   };
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(`/user/${username}`);
-    }
-  }, [isAuthenticated, navigate, username]);
 
   return (
     <div>

@@ -40,6 +40,15 @@ namespace Api.Repositories
             return user;
         }
 
+        public async Task<User> ChangeUserPassword(string username, string newPassword)
+        {
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null) { return null; }
+            user.PasswordHash = newPassword;
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
         public async Task<List<Todo>> AddTodo(Todo todo, int id)
         {
             var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.Id == id);
