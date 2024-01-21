@@ -25,8 +25,6 @@ const Header = () => {
 
           // Update the username in the AuthContext (not strictly necessary at this point)
           // setAuthUsername(updatedUsername); // Remove this line
-
-          console.log("Updated Username:", updatedUsername);
         }
       } catch (error) {
         console.error('Error fetching user details:', error);

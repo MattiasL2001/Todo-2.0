@@ -86,36 +86,37 @@ namespace Api.Controllers
         }
 
         [HttpPost("/users/{username}/PostTodo")]
-        public async Task<ActionResult<TodoDto>> PostTodo(bool completed, string title, int userId)
+        public async Task<ActionResult<TodoDto>> PostTodo(TodoDto todoDto)
         {
             var todo = new Todo
             {
-                Completed = completed,
-                Title = title,
+                Completed = todoDto.Completed,
+                Title = todoDto.Title,
             };
-            var user = await _userRepository.GetUser(userId);
+            var user = await _userRepository.GetUser(todoDto.UserId);
             if (user == null) { return  NotFound("User not found!"); }
-            var createdTodo = await _userRepository.AddTodo(todo, userId);
+            var createdTodo = await _userRepository.AddTodo(todo, todoDto.UserId);
             return Ok(createdTodo);
         }
-
         [HttpPut("/users/{username}/PutTodo")]
-        public async Task<ActionResult<Todo>> PutTodo(bool completed, string title, int todoId, int userId)
+        public async Task<ActionResult<TodoDto>> PutTodo(TodoDto todoDto)
         {
-            var updatedTodo = await _userRepository.UpdateTodo(userId, todoId, completed, title);
+            var updatedTodo = await _userRepository.UpdateTodo(todoDto);
 
             if (updatedTodo == null) { return BadRequest(); }
 
-            var todoDto = _mapper.Map<TodoDto>(updatedTodo);
+            //var todoDto = _mapper.Map<TodoDto>(updatedTodo);
             return Ok(todoDto);
         }
 
-        [HttpDelete("/users/{username}/DeleteTodo")]
-        public async Task<IActionResult> DeleteTodo(int userId, int todoId)
+
+        [HttpDelete("/users/{username}/DeleteTodo/{todoId}")]
+        public async Task<IActionResult> DeleteTodo(int todoId, string username)
         {
-            var todo = await _userRepository.DeleteTodo(userId, todoId);
-            if (todo == null) { return  NotFound(); }
+            var todo = await _userRepository.DeleteTodo(username, todoId);
+            if (todo == null) { return NotFound(); }
             return Ok(todo);
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using Api.Dtos;
+using Api.Models;
 
 namespace Api.Repositories
 {
@@ -12,7 +13,7 @@ namespace Api.Repositories
         Task<List<Todo>> GetUserTodos(string username);
         Task<List<Todo>> AddTodo(Todo todo, int id);
         Task<Todo> GetTodo(int userId, int todoId);
-        Task<Todo> UpdateTodo(int userId, int todoId, bool completed, string title);
-        Task<Todo> DeleteTodo(int userId, int todoId);
+        Task<Todo> UpdateTodo(TodoDto todoDto);
+        Task<Todo> DeleteTodo(string username, int todoId);
     }
 }

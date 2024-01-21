@@ -1,4 +1,5 @@
-﻿using Api.Models;
+﻿using Api.Dtos;
+using Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories
@@ -77,23 +78,31 @@ namespace Api.Repositories
             return todo;
         }
 
-        public async Task<Todo> UpdateTodo(int userId, int todoId, bool completed, string title)
+        public async Task<Todo> UpdateTodo(TodoDto todoDto)
         {
-            Todo todo = await GetTodo(userId, todoId);
+            Todo todo = await GetTodo(todoDto.UserId, todoDto.Id);
             if (todo == null) { return null; };
-            todo.Completed = completed;
-            todo.Title = title;
+            todo.Completed = todoDto.Completed;
+            todo.Title = todoDto.Title;
             await _context.SaveChangesAsync();
             return todo;
         }
 
-        public async Task<Todo> DeleteTodo(int userId, int todoId)
+        public async Task<Todo> DeleteTodo(string username, int todoId)
         {
-            Todo todo = await GetTodo(userId, todoId);
-            if (todo == null) { return null; };
-            _context.Remove(todo);
+            var user = await _context.Users.Include(u => u.Todos).FirstOrDefaultAsync(u => u.UserName == username);
+
+            if (user == null) { return null; }
+
+            var todo = user.Todos.FirstOrDefault(t => t.Id == todoId);
+
+            if (todo == null) { return null; }
+
+            user.Todos.Remove(todo);
             await _context.SaveChangesAsync();
+
             return todo;
         }
+
     }
 }
