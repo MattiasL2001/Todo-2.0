@@ -1,32 +1,10 @@
 import React, { useState } from 'react';
-import { RegisterUser, GetUsers, LoginUser } from '../services/userServices';
+import { RegisterUser, LoginUser } from '../services/userServices';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import '../styles/styles.css';
 
-// Styles
-const registerContainerStyle = {
-  display: 'flex',
-  flexDirection: 'column' as const,
-  alignItems: 'center',
-  padding: '20px',
-  // color: '#fff',
-};
-
-const inputStyle = {
-  margin: '10px 0',
-  padding: '10px',
-};
-
-const buttonStyle = {
-  background: '#4CAF50',
-  color: '#fff',
-  padding: '10px 20px',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-};
-
-export default function RegisterComponent() {
+const RegisterComponent: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { isAuthenticated, setAuthenticated } = useAuth();
@@ -51,18 +29,20 @@ export default function RegisterComponent() {
   };
 
   return (
-    <div style={registerContainerStyle}>
-        <h2>Register Page</h2>
-        <br></br>
+    <div className="container">
+      <h2>Register Page</h2>
+      <br />
       <label>Username</label>
-      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} style={inputStyle} />
+      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className="input-style" />
 
       <label>Password</label>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={inputStyle} />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-style" />
 
-      <button type="submit" onClick={handleRegisterClick} style={buttonStyle}>
+      <button type="submit" onClick={handleRegisterClick} className="button-style">
         Register
       </button>
     </div>
   );
-}
+};
+
+export default RegisterComponent;

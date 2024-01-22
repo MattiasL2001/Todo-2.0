@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { getUserDetails } from '../services/userServices';
+import '../styles/styles.css';
 
 const Header = () => {
   const { isAuthenticated, setAuthenticated } = useAuth();
@@ -35,35 +36,32 @@ const Header = () => {
   }, [username]);
 
   return (
-    <header style={headerStyle as React.CSSProperties}>
-      <h1>Header</h1>
+    <header className="header-style">
+      <h1>Todo Website</h1>
       <nav>
-        <ul style={ulStyle as React.CSSProperties}>
-          <li style={liStyle as React.CSSProperties}>
-            <Link to="/" style={linkStyle as React.CSSProperties}>Home</Link>
-          </li>
+        <ul className="ul-style">
           {isAuthenticated && (
-            <li style={liStyle as React.CSSProperties}>
+            <li className="li-style">
               {/* Link to dynamic URL with user's username */}
-              <Link to={`/user/${username}`} style={linkStyle as React.CSSProperties}>My Page</Link>
+              <Link to={`/user/${username}`} className="link-style">My Page</Link>
             </li>
           )}
           {isAuthenticated ? (
             <>
-              <li style={liStyle as React.CSSProperties}>
+              <li className="li-style">
                 {/* Show logout button if authenticated */}
-                <button onClick={handleLogout} style={buttonStyle as React.CSSProperties}>Logout</button>
+                <button onClick={handleLogout} className="button-style-header">Logout</button>
               </li>
             </>
           ) : (
             <>
-              <li style={liStyle as React.CSSProperties}>
+              <li className="li-style">
                 {/* Show login button if not authenticated */}
-                <Link to="/login" style={linkStyle as React.CSSProperties}>Login</Link>
+                <Link to="/login" className="link-style">Login</Link>
               </li>
-              <li style={liStyle as React.CSSProperties}>
+              <li className="li-style">
                 {/* Show register button if not authenticated */}
-                <Link to="/register" style={linkStyle as React.CSSProperties}>Register</Link>
+                <Link to="/register" className="link-style">Register</Link>
               </li>
             </>
           )}
@@ -71,37 +69,6 @@ const Header = () => {
       </nav>
     </header>
   );
-};
-
-// Styles
-const headerStyle = {
-  background: '#333',
-  color: '#fff',
-  padding: '10px',
-  textAlign: 'center',
-};
-
-const ulStyle = {
-  listStyle: 'none',
-  display: 'flex',
-  justifyContent: 'space-around',
-  padding: '0',
-};
-
-const liStyle = {
-  margin: '0',
-};
-
-const linkStyle = {
-  color: '#fff',
-  textDecoration: 'none',
-};
-
-const buttonStyle = {
-  background: 'none',
-  border: 'none',
-  color: '#fff',
-  cursor: 'pointer',
 };
 
 export default Header;

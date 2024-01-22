@@ -6,7 +6,7 @@ import Register from './views/Register';
 import User from './views/User';
 import NoPage from './views/NoPage';
 import { AuthProvider } from './AuthContext';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   return (
@@ -17,16 +17,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            {/* Include setAuthenticated prop in Login route to update state in the AuthContext */}
             <Route path="/register" element={<Register />} />
             <Route path="/nopage" element={<NoPage />} />
-
             <Route path="/user/:username" element={<User />} />
-
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-
-            {/* Add a catch-all route at the end, if needed */}
-            {/* <Route path="*" element={<Navigate to="/nopage" />} /> */}
+            <Route path='*' element={<NoPage />} />
           </Routes>
         </BrowserRouter>
       </div>
@@ -34,7 +29,6 @@ function App() {
   );
 }
 
-// Component for unauthorized access
 const UnauthorizedPage: React.FC = () => {
   return <div>Unauthorized access! Please log in to view this page.</div>;
 };

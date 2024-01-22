@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { addUserTodo } from '../services/userServices';
+import '../styles/styles.css';
 
 interface AddTodoFormProps {
-  username?: string; // Make username optional
+  username?: string;
   onTodoAdded: () => void;
 }
 
@@ -19,19 +20,30 @@ const AddTodoForm: React.FC<AddTodoFormProps> = ({ username = '', onTodoAdded })
     } catch (error) {
       console.error('Error adding todo:', error);
     }
-  
+
     // Reset the input fields
     setNewTodoTitle('');
     setNewTodoCompleted(false);
   };
 
   return (
-    <div>
+    <div className="add-todo-form">
       <label>Title:</label>
-      <input type="text" value={newTodoTitle} onChange={(e) => setNewTodoTitle(e.target.value)} />
+      <input
+        type="text"
+        value={newTodoTitle}
+        onChange={(e) => setNewTodoTitle(e.target.value)}
+        className="input-style"
+      />
       <label>Completed:</label>
-      <input type="checkbox" checked={newTodoCompleted} onChange={(e) => setNewTodoCompleted(e.target.checked)} />
-      <button onClick={handleSaveTodo}>Post Todo</button>
+      <input
+        type="checkbox"
+        checked={newTodoCompleted}
+        onChange={(e) => setNewTodoCompleted(e.target.checked)}
+      />
+      <button onClick={handleSaveTodo} className="button-style add-todo-button">
+        Post Todo
+      </button>
     </div>
   );
 };

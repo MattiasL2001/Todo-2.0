@@ -7,7 +7,6 @@ const homeContainerStyle = {
     flexDirection: 'column' as const,
     alignItems: 'center',
     padding: '20px',
-    // color: '#fff',
   };
 
 export default function Home() {
@@ -15,42 +14,11 @@ export default function Home() {
         <>
             <Header></Header>
             <div style={homeContainerStyle}>
-                <h2>Todo Website</h2>
+                <h1>Home Page</h1>
                 <br></br>
                 <br></br>
-                <p>Here you can post your todos, so you'll never forget what to do ;)</p>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <p>some text</p>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <br></br>
-                <p>some more text</p>
+                <h2>Here you can post your todos, so you'll never forget what to do ;)</h2>
+                <h2>Click on Login to view all your todos, or click Register to create an account.</h2>
             </div>
             <Footer></Footer>
         </>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import EditTodoForm from './EditTodoForm';
+import '../styles/styles.css';
 
 interface TodoProps {
   todo: {
@@ -9,11 +10,10 @@ interface TodoProps {
   };
   username?: string;
   onRemoveTodo: (todoId: number) => void;
-  onEditTodoSubmit: (editedTodoTitle: string, editedTodoCompleted: boolean) => void;
-  onTodoUpdated: () => void; // Ensure the correct name is used here
+  onEditTodoSubmit: (editedTodoTitle: string, editedTodoCompleted: boolean, ) => void;
 }
 
-const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEditTodoSubmit, onTodoUpdated }) => {
+const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEditTodoSubmit }) => {
   const [hovered, setHovered] = useState(false);
   const [editing, setEditing] = useState(false);
 
@@ -24,29 +24,21 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
   const handleEditSubmit = async (editedTodoTitle: string, editedTodoCompleted: boolean) => {
     onEditTodoSubmit(editedTodoTitle, editedTodoCompleted);
     setEditing(false);
-    onTodoUpdated()
   };
 
   return (
     <div
+      className={`todo-container ${hovered || editing ? 'editing' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        border: '1px solid #ddd',
-        borderRadius: '8px',
-        padding: '16px',
-        boxShadow: (hovered || editing) ? '0 8px 16px rgba(0, 0, 0, 0.2)' : '0 4px 8px rgba(0, 0, 0, 0.1)',
-        transition: 'box-shadow 0.3s ease-in-out',
-      }}
     >
       <p>Title: {todo.title}</p>
-      <p>Id: {todo.id}</p>
       <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
 
       {(hovered || editing) && (
-        <div>
-          <button onClick={handleEditToggle}>Edit ✏️</button>
-          <button onClick={() => onRemoveTodo(todo.id)}>Remove</button>
+        <div className='todo-button-container'>
+          <button className="button-style-small" onClick={handleEditToggle}>Edit Todo ✏️</button>
+          <button className="button-style-small" onClick={() => onRemoveTodo(todo.id)}>Remove Todo 🗑️</button>
         </div>
       )}
 
@@ -57,7 +49,10 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
           todoId={todo.id}
           initialTitle={todo.title}
           initialCompleted={todo.completed}
-          onTodoUpdated={handleEditSubmit}
+          onTodoUpdated={(editedTodoTitle, editedTodoCompleted) => {
+            handleEditSubmit(editedTodoTitle, editedTodoCompleted);
+          }}
+          onClose={() => setEditing(false)}
         />
       )}
     </div>
