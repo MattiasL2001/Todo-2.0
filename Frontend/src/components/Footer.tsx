@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <div className="page-style"> {}
       <div className="footer-style"> {}
-        <h1>Created by Mattias Lindblad</h1>
+        <p>Created by Mattias Lindblad</p>
       </div>
     </div>
   );
