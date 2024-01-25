@@ -6,6 +6,7 @@ import Register from './views/Register';
 import User from './views/User';
 import NoPage from './views/NoPage';
 import { AuthProvider } from './AuthContext';
+// import Store from './Store';
 import './styles/App.css';
 
 function App() {

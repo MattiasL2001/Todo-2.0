@@ -2,6 +2,13 @@
 using Api.Models;
 using Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -10,11 +17,14 @@ namespace Api.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticate _authenticate;
+        private readonly IConfiguration _configuration;
         private int passwordMinimumLength = 5;
+        private int tokenExpirationTime = 1;
 
-        public AuthenticateController(IAuthenticate authenticate)
+        public AuthenticateController(IAuthenticate authenticate, IConfiguration configuration)
         {
             _authenticate = authenticate;
+            _configuration = configuration;
         }
 
         [HttpPost("/register")]
@@ -28,7 +38,7 @@ namespace Api.Controllers
             if (user.Password.Length < passwordMinimumLength)
             {
                 Console.WriteLine("Bad password!");
-                return Conflict("Password need to include at minimum 5 characters!");
+                return Conflict("Password needs to include at least 5 characters!");
             }
 
             var userObj = await _authenticate.Register(user.Username, user.Password);
@@ -42,9 +52,16 @@ namespace Api.Controllers
             {
                 var user = await _authenticate.ValidateCredentials(userDto.UserName, userDto.Password);
 
-                if (user == null) { return Unauthorized("Could not find a user with matching credentials"); }
+                if (user == null)
+                {
+                    return Unauthorized("Could not find a user with matching credentials");
+                }
 
-                return Ok(user);
+                // Generate JWT token
+                var token = GenerateJwtToken(user);
+
+                // Return the token to the client
+                return Ok(new { Token = token });
             }
 
             return Unauthorized("Invalid username or password!");
@@ -62,10 +79,35 @@ namespace Api.Controllers
         {
             var user = await _authenticate.ValidateCredentials(userDto.UserName, userDto.Password);
 
-            if (user == null) { return Unauthorized("Could not find a user with matching credentials"); }
+            if (user == null)
+            {
+                return Unauthorized("Could not find a user with matching credentials");
+            }
 
             _authenticate.DeleteAccount(user);
             return Ok(user);
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                // Add more claims as needed based on your user data
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                _configuration["Jwt:Issuer"],
+                _configuration["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddHours(tokenExpirationTime),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -8,21 +8,11 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticatedState] = useState(() => {
-    const storedValue = sessionStorage.getItem('isAuthenticated');
-    return storedValue ? JSON.parse(storedValue) : false;
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const setAuthenticated = (value: boolean) => {
-    setIsAuthenticatedState(value);
-    sessionStorage.setItem('isAuthenticated', JSON.stringify(value));
+    setIsAuthenticated(value);
   };
-
-  useEffect(() => {
-    return () => {
-      // No need to clear sessionStorage in cleanup for persistent state
-    };
-  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setAuthenticated }}>

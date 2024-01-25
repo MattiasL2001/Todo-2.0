@@ -17,7 +17,10 @@ const LoginComponent: React.FC = () => {
 
       if (response.status === 200 && username !== "undefined") {
         setAuthenticated(true);
-        sessionStorage.setItem('username', username);
+        // const token = response.data.token;
+        // console.log("token: " + token)
+        // sessionStorage.setItem('username', username);
+        // sessionStorage.setItem("authToken", token)
 
         navigate(`/user/${username}`);
       } else {

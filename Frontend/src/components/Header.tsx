@@ -19,7 +19,7 @@ const Header = () => {
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        if (username != null && username !== "undefined") {
+        if (username != null && username !== "undefined" && isAuthenticated) {
           // Use getUserDetails to fetch user details based on the stored username
           const userDetails = await getUserDetails(username);
           const updatedUsername = userDetails.username;
