@@ -21,7 +21,6 @@ const AddTodoForm: React.FC<AddTodoFormProps> = ({ username = '', onTodoAdded })
       console.error('Error adding todo:', error);
     }
 
-    // Reset the input fields
     setNewTodoTitle('');
     setNewTodoCompleted(false);
   };

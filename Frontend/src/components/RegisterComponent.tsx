@@ -12,7 +12,6 @@ const RegisterComponent: React.FC = () => {
 
   const handleRegisterClick = async () => {
     try {
-      // Step 1: Register the user
       const registrationData = await RegisterUser(username, password);
 
       if (registrationData) {

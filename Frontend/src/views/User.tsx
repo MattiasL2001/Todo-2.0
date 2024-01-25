@@ -87,35 +87,36 @@ const User: React.FC = () => {
     <>
       <Header />
       <div className="user-container">
-        {isAuthenticated && (
-          <button className="button-style add-todo-button" onClick={handleAddTodo}>Add Todo</button>
+        {isAuthenticated ? (
+          <>
+            <button className="button-style add-todo-button" onClick={handleAddTodo}>Add Todo</button>
+            {addingTodo && (
+              <AddTodoForm
+                username={username}
+                onTodoAdded={handleTodoAdded}
+              />
+            )}
+            <br />
+            <br />
+            <div className="todo-grid">
+              {userTodos.map((todo) => (
+                <TodoComponent
+                  key={todo.id}
+                  todo={todo}
+                  username={username}
+                  onEditTodoSubmit={handleEditTodoSubmit}
+                  onRemoveTodo={handleRemoveTodo}
+                />
+              ))}
+            </div>
+          </>
+        ) : (
+          <div>Please log in to view todos.</div>
         )}
-
-        {addingTodo && (
-          <AddTodoForm
-            username={username}
-            onTodoAdded={handleTodoAdded}
-          />
-        )}
-
-        <br />
-        <br />
-
-        <div className="todo-grid">
-          {userTodos.map((todo) => (
-            <TodoComponent
-              key={todo.id}
-              todo={todo}
-              username={username}
-              onEditTodoSubmit={handleEditTodoSubmit}
-              onRemoveTodo={handleRemoveTodo}
-            />
-          ))}
-        </div>
       </div>
       <Footer />
     </>
-  );
+  );  
 };
 
 export default User;

@@ -1,4 +1,3 @@
-// LoginComponent.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
@@ -17,11 +16,6 @@ const LoginComponent: React.FC = () => {
 
       if (response.status === 200 && username !== "undefined") {
         setAuthenticated(true);
-        // const token = response.data.token;
-        // console.log("token: " + token)
-        // sessionStorage.setItem('username', username);
-        // sessionStorage.setItem("authToken", token)
-
         navigate(`/user/${username}`);
       } else {
         console.log("error: " + response.status);
