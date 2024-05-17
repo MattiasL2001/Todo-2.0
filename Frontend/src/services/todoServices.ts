@@ -1,8 +1,9 @@
 import axios from 'axios';
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/Todos`;
 
-export const createTodo = (todo: {title: string; completed: boolean;}) => {
+export const createTodo = (todo: {priority: number, title: string; completed: boolean;}) => {
     return axios.post(baseUrl, {
+        priority: todo.priority,
         title: todo.title,
         completed: todo.completed
     }).then(response => response.data)
@@ -13,8 +14,9 @@ export const loadTodos = () => {
     .then(response => response.data)
 }
 
-export const updateTodo = (todo: {id?: number, title: string; completed: boolean;}) => {
+export const updateTodo = (todo: {priority: number, id?: number, title: string; completed: boolean;}) => {
     return axios.put(`${baseUrl}/${todo.id}`, {
+        priority: todo.priority,
         id: todo.id,
         title: todo.title,
         completed: todo.completed

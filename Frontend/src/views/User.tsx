@@ -9,6 +9,7 @@ import TodoComponent from '../components/TodoComponent';
 import '../styles/styles.css';
 
 interface Todo {
+  priority: number,
   id: number;
   title: string;
   completed: boolean;
@@ -33,7 +34,7 @@ const User: React.FC = () => {
             setUserTodos(todos);
           }
         } catch (error) {
-          // Handle the error if needed
+          
         }
       }
     };
@@ -58,7 +59,7 @@ const User: React.FC = () => {
     setEditingTodoId(null);
   };
 
-  const handleEditTodoSubmit = async (editedTodoTitle: string, editedTodoCompleted: boolean) => {
+  const handleEditTodoSubmit = async (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean) => {
     if (username) {
       try {
         const updatedTodos = await getUserTodos(username);

@@ -14,8 +14,7 @@ api.interceptors.request.use(
         token = await refreshAuthToken();
       } catch (error) {
         console.error('Failed to refresh token:', error);
-        // Handle token refresh failure, such as logging out the user or redirecting to the login page
-        throw error; // Throw the error to prevent the request from proceeding
+        throw error;
       }
     }
 
@@ -71,7 +70,7 @@ export const getUserTodos = async (username: string) => {
   }
 };
 
-export const addUserTodo = async (username: string, completed: boolean, title: string) => {
+export const addUserTodo = async (username: string, priority: number, completed: boolean, title: string) => {
   try {
     const user = await getUserDetails(username);
 
@@ -81,6 +80,7 @@ export const addUserTodo = async (username: string, completed: boolean, title: s
     }
 
     const response = await api.post(`/users/${username}/PostTodo`, {
+      priority: priority,
       completed: completed,
       title: title,
       userId: user.id
@@ -93,7 +93,7 @@ export const addUserTodo = async (username: string, completed: boolean, title: s
   }
 };
 
-export const editUserTodo = async (username: string, todoId: number, completed: boolean, title: string) => {
+export const editUserTodo = async (username: string, priority: number, todoId: number, completed: boolean, title: string) => {
   try {
     const user = await getUserDetails(username);
 
@@ -103,6 +103,7 @@ export const editUserTodo = async (username: string, todoId: number, completed: 
     }
 
     const response = await api.put(`/users/${username}/PutTodo`, {
+      priority: priority,
       completed: completed,
       title: title,
       id: todoId,

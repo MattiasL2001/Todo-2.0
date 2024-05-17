@@ -82,6 +82,7 @@ namespace Api.Repositories
         {
             Todo todo = await GetTodo(todoDto.UserId, todoDto.Id);
             if (todo == null) { return null; };
+            todo.Priority = todoDto.Priority;
             todo.Completed = todoDto.Completed;
             todo.Title = todoDto.Title;
             await _context.SaveChangesAsync();

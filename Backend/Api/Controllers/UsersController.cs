@@ -90,6 +90,7 @@ namespace Api.Controllers
         {
             var todo = new Todo
             {
+                Priority = todoDto.Priority,
                 Completed = todoDto.Completed,
                 Title = todoDto.Title,
             };
@@ -105,7 +106,6 @@ namespace Api.Controllers
 
             if (updatedTodo == null) { return BadRequest(); }
 
-            //var todoDto = _mapper.Map<TodoDto>(updatedTodo);
             return Ok(todoDto);
         }
 

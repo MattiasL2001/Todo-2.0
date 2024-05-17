@@ -4,13 +4,14 @@ import '../styles/styles.css';
 
 interface TodoProps {
   todo: {
+    priority: number,
     id: number;
     title: string;
     completed: boolean;
   };
   username?: string;
   onRemoveTodo: (todoId: number) => void;
-  onEditTodoSubmit: (editedTodoTitle: string, editedTodoCompleted: boolean, ) => void;
+  onEditTodoSubmit: (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean, ) => void;
 }
 
 const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEditTodoSubmit }) => {
@@ -21,8 +22,8 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
     setEditing((prevEditing) => !prevEditing);
   };
 
-  const handleEditSubmit = async (editedTodoTitle: string, editedTodoCompleted: boolean) => {
-    onEditTodoSubmit(editedTodoTitle, editedTodoCompleted);
+  const handleEditSubmit = async (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean) => {
+    onEditTodoSubmit(editedTodoPriority, editedTodoTitle, editedTodoCompleted);
     setEditing(false);
   };
 
@@ -32,6 +33,7 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      <p>Priority: {todo.priority}</p>
       <p>Title: {todo.title}</p>
       <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
 
@@ -46,11 +48,12 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
       {editing && username && (
         <EditTodoForm
           username={username}
+          initialPriority={todo.priority}
           todoId={todo.id}
           initialTitle={todo.title}
           initialCompleted={todo.completed}
-          onTodoUpdated={(editedTodoTitle, editedTodoCompleted) => {
-            handleEditSubmit(editedTodoTitle, editedTodoCompleted);
+          onTodoUpdated={(editedTodoPriority, editedTodoTitle, editedTodoCompleted) => {
+            handleEditSubmit(editedTodoPriority, editedTodoTitle, editedTodoCompleted);
           }}
           onClose={() => setEditing(false)}
         />

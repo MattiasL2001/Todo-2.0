@@ -1,4 +1,7 @@
-.container {
+/* Default styles */
+.container,
+.registerContainerStyle,
+.user-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +13,8 @@
   padding: 10px;
 }
 
-.button-style {
+.button-style,
+.button-style-small {
   background: #4caf50;
   color: #fff;
   padding: 10px 20px;
@@ -20,19 +24,7 @@
 }
 
 .button-style-small {
-  background: #4caf50;
-  color: #fff;
   padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.registerContainerStyle {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
 }
 
 .page-style {
@@ -99,6 +91,10 @@
   transition: box-shadow 0.3s ease-in-out;
 }
 
+.todo-container p {
+  height: 15px;
+}
+
 .todo-button-container {
   display: flex;
   flex-direction: row;
@@ -133,27 +129,37 @@
 }
 
 .edit-todo-message {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 275px;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
-.user-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  width: 80%;
-  margin: 0 auto;
-  overflow-y: auto;
+.edit-todo-message h3 {
+  height: 15px;
+}
+
+.edit-todo-div {
+  height: 10px;
+}
+
+.error-message {
+  background-color: #f44336;
+  color: white;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 }
 
 .todo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-  width: 100%;
+  gap: 25px;
+  width: 90%;
 }
 
 .todo-box {
@@ -176,12 +182,67 @@
   margin-right: 10px;
 }
 
-/* New CSS for error message container */
-.error-message {
-  background-color: #f44336; /* Red */
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  text-align: center;
+@media screen and (max-width: 750px) {
+  .footer-style {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .container,
+  .registerContainerStyle,
+  .user-container {
+    padding: 10px;
+  }
+
+  .button-style,
+  .button-style-small {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .button-style-small {
+    padding: 4px 8px;
+  }
+
+  .footer-style {
+    font-size: 18px;
+  }
+
+  .header-style {
+    padding: 8px;
+  }
+
+  .link-style {
+    font-size: 16px;
+  }
+
+  .button-style-header {
+    font-size: 16px;
+  }
+
+  .todo-container {
+    height: 150px;
+  }
+
+  .todo-container p {
+    height: 12px;
+  }
+
+  .edit-todo-message {
+    width: 250px;
+    height: 225px;
+  }
+
+  .edit-todo-message h3 {
+    height: 12px;
+  }
+
+  .edit-todo-div {
+    height: 8px;
+  }
+
+  .error-message {
+    font-size: 14px;
+  }
 }
