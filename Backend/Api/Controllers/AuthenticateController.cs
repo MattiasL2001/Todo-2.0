@@ -2,13 +2,10 @@
 using Api.Models;
 using Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
@@ -19,7 +16,7 @@ namespace Api.Controllers
         private readonly IAuthenticate _authenticate;
         private readonly IConfiguration _configuration;
         private int passwordMinimumLength = 5;
-        private int tokenExpirationTime = 1;
+        private int tokenExpirationTimeMinutes = 15;
 
         public AuthenticateController(IAuthenticate authenticate, IConfiguration configuration)
         {
@@ -57,8 +54,16 @@ namespace Api.Controllers
                     return Unauthorized("Could not find a user with matching credentials");
                 }
 
-                // Generate JWT token
-                var token = GenerateJwtToken(user);
+                var claims = new[]
+                {
+            new Claim(ClaimTypes.Name, user.UserName),
+            // Add more claims as needed based on your user data
+        };
+
+                var identity = new ClaimsIdentity(claims, "jwt");
+                var principal = new ClaimsPrincipal(identity);
+
+                var token = GenerateJwtToken(principal);
 
                 // Return the token to the client
                 return Ok(new { Token = token });
@@ -66,6 +71,8 @@ namespace Api.Controllers
 
             return Unauthorized("Invalid username or password!");
         }
+
+
 
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
@@ -88,26 +95,60 @@ namespace Api.Controllers
             return Ok(user);
         }
 
-        private string GenerateJwtToken(User user)
+        private string GenerateJwtToken(ClaimsPrincipal principal)
         {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                // Add more claims as needed based on your user data
-            };
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 _configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddHours(tokenExpirationTime),
+                principal.Claims,
+                expires: DateTime.Now.AddMinutes(tokenExpirationTimeMinutes),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
+        [HttpPost("/refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto refreshTokenDto)
+        {
+            var principal = GetPrincipalFromExpiredToken(refreshTokenDto.Token);
+            if (principal == null)
+            {
+                return Unauthorized("Invalid token");
+            }
+
+            var newToken = GenerateJwtToken(principal);
+            return Ok(new { Token = newToken });
+        }
+
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _configuration["Jwt:Issuer"],
+                ValidAudience = _configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
+                ValidateLifetime = false // disable lifetime validation as we want to refresh tokens
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out _);
+                return principal;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
 }

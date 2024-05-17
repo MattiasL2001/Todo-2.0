@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import { isTokenExpired } from "../src/utils";
 
 interface AuthContextProps {
   isAuthenticated: boolean;
@@ -9,6 +10,16 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwtToken');
+    if (token && !isTokenExpired(token)) {
+      setIsAuthenticated(true);
+    } else {
+      localStorage.removeItem('jwtToken');
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   const setAuthenticated = (value: boolean) => {
     setIsAuthenticated(value);

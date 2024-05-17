@@ -3,32 +3,50 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 import { LoginUser } from '../services/userServices';
 import '../styles/styles.css';
+import { AxiosError } from 'axios';
 
 const LoginComponent: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const { isAuthenticated, setAuthenticated } = useAuth();
+  const { setAuthenticated } = useAuth();
 
   const handleLogin = async () => {
     try {
       const response = await LoginUser(username, password);
 
-      if (response.status === 200 && username !== "undefined") {
+      if (response.status === 200) {
+        localStorage.setItem('jwtToken', response.data.token);
+        localStorage.setItem('username', username);
         setAuthenticated(true);
         navigate(`/user/${username}`);
       } else {
-        console.log("error: " + response.status);
+        setErrorMessage('Login failed: Incorrect username or password');
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      if ((error as AxiosError).isAxiosError) {
+        const axiosError = error as AxiosError;
+        console.error('Login failed:', axiosError);
+        if (axiosError.response) {
+          setErrorMessage('Login failed: ' + axiosError.response.data);
+        } else {
+          setErrorMessage('Login failed: Please check your network connection');
+        }
+      } else {
+        // Handle non-Axios errors here
+        console.error('Non-Axios error:', error);
+        setErrorMessage('Login failed: An unexpected error occurred');
+      }
     }
   };
 
   return (
     <div className="container">
       <h2>Login Page</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <br />
+      <label>Username</label>
       <input
         type="text"
         value={username}
@@ -36,6 +54,7 @@ const LoginComponent: React.FC = () => {
         placeholder="Username"
         className="input-style"
       />
+      <label>Password</label>
       <input
         type="password"
         value={password}
