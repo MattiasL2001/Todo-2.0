@@ -169,7 +169,7 @@
   flex-direction: column;
   width: 300px;
   height: auto;
-  background: #fff;
+  background-color: rgb(224, 224, 140);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
