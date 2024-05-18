@@ -11,7 +11,7 @@ interface TodoProps {
   };
   username?: string;
   onRemoveTodo: (todoId: number) => void;
-  onEditTodoSubmit: (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean, ) => void;
+  onEditTodoSubmit: (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean) => void;
 }
 
 const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEditTodoSubmit }) => {
@@ -27,12 +27,27 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
     setEditing(false);
   };
 
+  const priorityColor = (priority: number): string => {
+    switch (priority) {
+      case 1:
+        return '#00CED1'; // DarkTurquoise
+      case 2:
+        return '#FFA500'; // Orange
+      case 3:
+        return '#FF6347'; // Tomato
+      default:
+        return '#00CED1'; // DarkTurquoise
+    }
+  };
+
   return (
     <div
       className={`todo-container ${hovered || editing ? 'editing' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      style={{ backgroundColor: priorityColor(todo.priority) }}
     >
+      <div className="pin"></div>
       <p>Priority: {todo.priority}</p>
       <p>Title: {todo.title}</p>
       <p>Completed: {todo.completed ? 'Yes' : 'No'}</p>
@@ -44,7 +59,6 @@ const TodoComponent: React.FC<TodoProps> = ({ todo, username, onRemoveTodo, onEd
         </div>
       )}
 
-      {/* Render EditTodoForm only for the selected todo */}
       {editing && username && (
         <EditTodoForm
           username={username}

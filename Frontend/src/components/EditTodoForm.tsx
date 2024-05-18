@@ -23,13 +23,11 @@ const EditTodoForm: React.FC<EditTodoFormProps> = ({
   const [editedPriority, setEditedPriority] = useState(initialPriority);
   const [editedTitle, setEditedTitle] = useState(initialTitle);
   const [editedCompleted, setEditedCompleted] = useState(initialCompleted);
-  const [errorText, setErrorText] = useState('');
 
   const handleUpdateTodo = async () => {
     try {
       if (editedPriority < 1 || editedPriority > 3) {
-        setErrorText('Priority must be between 1 and 3');
-        return;
+        throw new Error('Priority must be between 1 and 3');
       }
 
       await editUserTodo(username, editedPriority, todoId, editedCompleted, editedTitle);
@@ -37,22 +35,18 @@ const EditTodoForm: React.FC<EditTodoFormProps> = ({
       onClose();
     } catch (error) {
       console.error('Error updating todo:', error);
+      alert(error || 'An error occurred');
     }
   };
 
   return (
     <div className="edit-todo-overlay">
       <div className="edit-todo-message">
-        <h3>Edit Todo</h3>
-        {errorText && <p style={{ color: 'red', marginBottom: '10px' }}>{errorText}</p>}
         <label>Priority:</label>
         <input
           type="number"
           value={editedPriority}
-          onChange={(e) => {
-            setEditedPriority(e.target.valueAsNumber);
-            setErrorText('');
-          }}
+          onChange={(e) => setEditedPriority(e.target.valueAsNumber)}
         />
         <label>Title:</label>
         <input
@@ -66,10 +60,10 @@ const EditTodoForm: React.FC<EditTodoFormProps> = ({
           checked={editedCompleted}
           onChange={() => setEditedCompleted(!editedCompleted)}
         />
-        <div className='edit-todo-div'></div>
-        <button onClick={handleUpdateTodo} className='button-style-small'>Update Todo</button>
-        <div className='edit-todo-div'></div>
-        <button onClick={onClose} className='button-style-small'>Cancel</button>
+        <div className="edit-todo-div"></div>
+        <button onClick={handleUpdateTodo} className="button-style-small">Update Todo</button>
+        <div className="edit-todo-div"></div>
+        <button onClick={onClose} className="button-style-small">Cancel</button>
       </div>
     </div>
   );

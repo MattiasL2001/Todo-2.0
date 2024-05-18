@@ -1,4 +1,3 @@
-/* Default styles */
 .container,
 .registerContainerStyle,
 .user-container {
@@ -80,19 +79,55 @@
 }
 
 .todo-container {
+  width: 200px;
+  height: 200px;
+  background-color: rgb(224, 224, 140);
+  padding: 16px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease-in-out;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  position: relative;
+  transform: rotate(-2deg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 175px;
+  align-items: center;
+}
+.todo-container::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 10px;
   background-color: rgb(224, 224, 140);
-  border: 1px solid #ddd;
+  z-index: -1;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  transform: rotate(2deg);
   border-radius: 8px;
-  padding: 16px;
-  transition: box-shadow 0.3s ease-in-out;
+}
+
+.todo-container .pin {
+  width: 20px;
+  height: 20px;
+  border: rgb(225, 0, 0);
+  border-style: solid;
+  border-width: 5px;
+  background-color: red;
+  border-radius: 50%;
+  top: 0px;
+  margin-bottom: 20px;
+  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
+}
+
+.todo-container h3 {
+  height: 15px;
+  margin-top: 0;
 }
 
 .todo-container p {
-  height: 15px;
+  height: 10px;
 }
 
 .todo-button-container {
@@ -112,8 +147,8 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.todo-container.editing {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.todo-container.editing .pin {
+  display: none;
 }
 
 .edit-todo-overlay {
@@ -126,22 +161,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .edit-todo-message {
   display: flex;
   flex-direction: column;
   width: 300px;
-  height: 275px;
+  height: auto;
   background: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-.edit-todo-message h3 {
-  height: 15px;
 }
 
 .edit-todo-div {
@@ -151,16 +182,24 @@
 .error-message {
   background-color: #f44336;
   color: white;
-  transform: translate(-50%, -50%);
+  border-radius: 2px;
   z-index: 999;
+}
+
+.error-message-edit-todo {
+  background-color: #f44336;
+  color: white;
 }
 
 .todo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  justify-items: center;
+  grid-template-columns: repeat(4, minmax(250px, 1fr));
   gap: 25px;
   width: 90%;
+  margin: 0 auto;
 }
+
 
 .todo-box {
   border: 1px solid #ddd;
@@ -182,9 +221,31 @@
   margin-right: 10px;
 }
 
+@media screen and (max-width: 1250px) {
+  .todo-grid {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(250px, 1fr));
+    gap: 25px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .todo-grid {
+    grid-template-columns: repeat(2, minmax(250px, 1fr));
+    gap: 10px;
+  }
+}
+
 @media screen and (max-width: 750px) {
   .footer-style {
     font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .todo-grid {
+    grid-template-columns: repeat(1, minmax(250px, 1fr));
+    gap: 25px;
   }
 }
 
@@ -219,14 +280,6 @@
 
   .button-style-header {
     font-size: 16px;
-  }
-
-  .todo-container {
-    height: 150px;
-  }
-
-  .todo-container p {
-    height: 12px;
   }
 
   .edit-todo-message {

@@ -59,7 +59,7 @@ const User: React.FC = () => {
     setEditingTodoId(null);
   };
 
-  const handleEditTodoSubmit = async (editedTodoPriority: number, editedTodoTitle: string, editedTodoCompleted: boolean) => {
+  const handleEditTodoSubmit = async () => {
     if (username) {
       try {
         const updatedTodos = await getUserTodos(username);
