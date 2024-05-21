@@ -1,7 +1,7 @@
 📋 My Todo Project
 
 Welcome to my Todo 2.0 project! Why is it called 2.0 you may ask? Well that's because I beefed it up a bit! This Todo app comes with login authentication/authorization.
-It is built with a React/Typescript frontend and a ASP.Net Core Web Api/Entity Framework/SQLite backend.
+It is built with a React/TypeScript frontend and a ASP.Net Core Web Api/Entity Framework/SQLite backend.
 
 🌟 Features
 
@@ -14,7 +14,7 @@ It is built with a React/Typescript frontend and a ASP.Net Core Web Api/Entity F
 
 The repo is completely free to clone down and use for own purposes.
 
-🖼️ Footage
+🖼️ Screenshots
 
 ![Home](https://github.com/MattiasL2001/Todo/assets/45106868/c0f9d699-01b9-413c-bddd-19b3c1875bed)
 
