@@ -1,6 +1,7 @@
 📋 My Todo Project
 
-Welcome to my Todo 2.0 project! Why is it called 2.0 you may ask? Well that's because I beefed it up a bit! This Todo app comes with login authentication/authorization.
+Welcome to my Todo 2.0 project! Why is it called 2.0 you may ask? Well that's because I beefed it up a bit! This Todo app comes with login authentication/authorization
+and JSON Web Tokens.
 It is built with a React/TypeScript frontend and a ASP.Net Core Web Api/Entity Framework/SQLite backend.
 
 🌟 Features
