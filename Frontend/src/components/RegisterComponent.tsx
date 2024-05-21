@@ -33,10 +33,9 @@ const RegisterComponent: React.FC = () => {
     } catch (error: any) {
       if (error.isAxiosError) {
         const axiosError = error as AxiosError;
-        console.error('Registration or login failed:', axiosError);
-        setErrorMessage('Registration or login failed: ' + error.response.data);
+        console.error('Registration failed:', axiosError);
+        setErrorMessage('Registration failed: ' + error.response.data);
       } else {
-        // Handle non-Axios errors here
         console.error('Non-Axios error:', error);
         setErrorMessage('An unexpected error occurred. Please try again.');
       }

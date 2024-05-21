@@ -34,7 +34,6 @@ const LoginComponent: React.FC = () => {
           setErrorMessage('Login failed: Please check your network connection');
         }
       } else {
-        // Handle non-Axios errors here
         console.error('Non-Axios error:', error);
         setErrorMessage('Login failed: An unexpected error occurred');
       }
