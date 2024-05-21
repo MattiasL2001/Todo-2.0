@@ -6,6 +6,7 @@ It is built with a React/Typescript frontend and a ASP.Net Core Web Api/Entity F
 🌟 Features
 
 🔒 Register: Register as a user to add your todos.
+🔑 Password Hashing: All stored passwords are hashed for safety.
 ✅ Add Todos: Quickly add new todos with a simple input.
 ✏️ Edit Todos: Modify existing todos with ease.
 🗑️ Delete Todos: Remove todos that are no longer needed.
