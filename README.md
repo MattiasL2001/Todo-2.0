@@ -24,7 +24,7 @@ The repo is completely free to clone down and use for own purposes.
 
 ![Home](https://github.com/MattiasL2001/Todo/assets/45106868/c0f9d699-01b9-413c-bddd-19b3c1875bed)
 
-![Register](https://github.com/MattiasL2001/Todo/assets/45106868/c9d29512-ab02-4304-9352-f7d0f51bfdf8)
+![Register](https://github.com/MattiasL2001/Todo-2.0/assets/45106868/f7c911be-468c-47c4-81f6-0853e14d5ba4)
 
 ![Login](https://github.com/MattiasL2001/Todo/assets/45106868/ae6411c3-0257-4ed3-bdd4-d0916d94c52c)
 
