@@ -21,3 +21,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Ignore SQLite database + WAL/SHM temp files
+Backend/Api/userDb.db
+Backend/Api/userDb.db-shm
+Backend/Api/userDb.db-wal
+
+# Ignore ALL .db files in repo as extra protection
+*.db
+*.db-shm
+*.db-wal
+
+# Ignore docker build artifacts if they appear
+*.log

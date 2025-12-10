@@ -31,6 +31,7 @@ const Home: React.FC = () => {
           <>
             <h2>Here you can post your todos, so you'll never forget what to do ;)</h2>
             <h2>Click on Login to view all your todos, or click Register to create an account.</h2>
+            <h2 style={{ color: "red" }}>WARNING! This application is for educational purposes. Do not register with sensitive data/information.</h2>
           </>
         )}
       </div>
