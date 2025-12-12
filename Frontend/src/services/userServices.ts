@@ -1,8 +1,12 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { isTokenExpired, refreshAuthToken } from '../utils';
 
+// const api = axios.create({
+//   baseURL: 'https://localhost:7067',
+// });
+
 const api = axios.create({
-  baseURL: 'https://localhost:7067',
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 api.interceptors.request.use(

@@ -1,0 +1,6 @@
+version: "3.8"
+services:
+  app:
+    image: mattiasl2001/todo-api:latest
+    ports:
+      - "5000:5000"

@@ -1,4 +1,4 @@
-global using Api.Data;
+﻿global using Api.Data;
 using Api.Repositories;
 using Api.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +14,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost3000",
-        builder =>
+    options.AddPolicy("AllowFrontend",
+        policy =>
         {
-            builder.WithOrigins("http://localhost:3000")
+            policy
+                .WithOrigins(
+                    "http://localhost:3000",
+                    "http://todo-frontend-mattias.s3-website.eu-north-1.amazonaws.com",
+                    "https://todo-frontend-mattias.s3-website.eu-north-1.amazonaws.com"
+                )
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -34,9 +39,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthenticate, AuthenticationService>();
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
+//builder.Services.AddDbContext<UserContext>(options =>
+//{
+//    options.UseSqlite("Data Source=userDb.db");
+//});
+
 builder.Services.AddDbContext<UserContext>(options =>
 {
-    options.UseSqlite("Data Source=userDb.db");
+    options.UseInMemoryDatabase("UsersDb");
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -72,13 +82,15 @@ var app = builder.Build();
 //}
 
 app.UseSwagger();
-
 app.UseSwaggerUI();
-
-app.UseCors("AllowLocalhost3000");
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
+app.UseCors("AllowFrontend");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
