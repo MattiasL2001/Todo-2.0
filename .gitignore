@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# SQLite databases (Todo backend)
+Todo/Backend/Api/*.db
+Todo/Backend/Api/*.db-shm
+Todo/Backend/Api/*.db-wal
