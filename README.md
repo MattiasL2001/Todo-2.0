@@ -2,7 +2,7 @@
 
 Welcome to my Todo 2.0 project! Why is it called 2.0 you may ask? Well that's because I beefed it up a bit! This Todo app comes with login authentication/authorization
 and JSON Web Tokens.
-It is built with a React/TypeScript frontend and a ASP.Net Core Web Api/Entity Framework/SQLite backend.
+It is built with a React/TypeScript frontend and an ASP.Net Core Web Api/Entity Framework/SQLite backend.
 
 🌟 Features
 
@@ -18,7 +18,21 @@ It is built with a React/TypeScript frontend and a ASP.Net Core Web Api/Entity F
 
 📋 Todo Priority: Set a priority on each todo between 1 and 3.
 
-The repo is completely free to clone down and use for own purposes.
+☁️ Deployment & Cloud Setup (AWS)
+
+This project was deployed to AWS as part of a cloud development course to get practical experience with deploying a real application.
+
+Setup overview:
+
+* Frontend: Hosted as a static website in an Amazon S3 bucket.
+
+* Backend API: Containerized and deployed using AWS Elastic Beanstalk, pulling the image from Docker Hub.
+
+* Permissions: Basic access permissions configured using AWS IAM.
+
+* Frontend ↔ Backend communication: JWT-based authentication.
+
+The focus was on understanding the deployment flow, container-based deployment, and how cloud services integrate in practice.
 
 🖼️ Screenshots
 
