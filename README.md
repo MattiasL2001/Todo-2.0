@@ -18,6 +18,8 @@ It is built with a React/TypeScript frontend and an ASP.Net Core Web Api/Entity 
 
 📋 Todo Priority: Set a priority on each todo between 1 and 3.
 
+-----------------------------------------------------------------------------------------------------------------------------
+
 ☁️ Deployment & Cloud Setup (AWS)
 
 This project was deployed to AWS as part of a cloud development course to get practical experience with deploying a real application.
@@ -33,6 +35,8 @@ Setup overview:
 * Frontend ↔ Backend communication: JWT-based authentication.
 
 The focus was on understanding the deployment flow, container-based deployment, and how cloud services integrate in practice.
+
+-----------------------------------------------------------------------------------------------------------------------------
 
 🖼️ Screenshots
 
